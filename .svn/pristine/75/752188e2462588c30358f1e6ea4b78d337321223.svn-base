@@ -1,0 +1,100 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package br.com.amar.modelo;
+
+import br.com.amar.modelo.template.ModeloEntidade;
+import java.util.Date;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+/**
+ *
+ * @author Rodrigo
+ */
+@Entity
+public class Secao extends ModeloEntidade {
+
+    /**
+     * Identificador do seção
+     */
+    @Id
+    @GeneratedValue
+    private Long id;
+
+    /**
+     * Retorna o identificador do seção
+     *
+     * @return Número que identifica o seção
+     */
+    public Long getId() {
+        return id;
+    }
+
+    /**
+     * Descrição do seção
+     */
+    @Column(nullable = false, length = 100)
+    private String descricao;
+
+    /**
+     * Retorna a descrição atual do seção
+     *
+     * @return Descrição atual do seção
+     */
+    public String getDescricao() {
+        return this.descricao;
+    }
+
+    /**
+     * Defini uma nova descrição para o seção
+     *
+     * @param novaDescricao Nova descrição para o seção
+     */
+    public void setDescricao(String novaDescricao) {
+        this.descricao = novaDescricao;
+    }
+
+    /**
+     * Sigla da seção
+     */
+    @Column(nullable = false, length = 3)
+    private String sigla;
+
+    /**
+     * Retorna a sigla da seção
+     *
+     * @return sigla da seção
+     */
+    public String getSigla() {
+        return sigla;
+    }
+
+    /**
+     * Defini a sigla da seção
+     *
+     * @param novaSigla Sigla a ser definida
+     */
+    public void setSigla(String novaSigla) {
+        this.sigla = novaSigla;
+    }
+
+    /**
+     * Quando inativo preenche esse campo com a data
+     */
+    @Column(nullable = true)
+    @Temporal(TemporalType.DATE)
+    private Date dataInativo;
+
+    @Override
+    public Long[] getChavePrimaria() {
+        return new Long[]{getId()};
+    }
+
+}

@@ -1,0 +1,83 @@
+<ui:composition template="/WEB-INF/Templates/TelaPrincipal.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets" 
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:define name="conteudo">
+        <h:form id="formulario">
+            <f:ajax>
+                <p:tabView id="tipos_membros">
+                    <p:tab title="Manutenção de Tipos de Membros" rendered="#{tiposMembrosBean.modoListagem}" >
+                        <p:commandButton icon="ui-icon-plus" value="Inclui">
+                            <f:ajax
+                                event="click"
+                                execute="tipos_membros"
+                                render="tipos_membros"
+                                listener="#{tiposMembrosBean.iniciarInclusao}"/>
+                        </p:commandButton>
+                        <p:commandButton id="apaga_selecionado" icon="ui-icon-minus" value="Apaga">
+                            <f:ajax 
+                                event="click" 
+                                execute="lista_tipos" 
+                                render="lista_tipos"
+                                listener="#{tiposMembrosBean.apagaSelecionados}"/>
+                        </p:commandButton>
+                        <p:commandButton icon="ui-icon-edit" value="Editar">
+                            <f:ajax 
+                                event="click" 
+                                execute="tipos_membros" 
+                                render="tipos_membros"
+                                listener="#{tiposMembrosBean.alterarRegistro}"/>
+                        </p:commandButton>
+                        <p:separator/>
+                        <f:ajax>
+                            <p:dataTable
+                                id="lista_tipos"
+                                value="#{tiposMembrosBean.dados}"
+                                var="tipoMembro"
+                                selectionMode="multiple"
+                                rowKey="#{tipoMembro.id}"
+                                selection="#{tiposMembrosBean.selecionados}">
+
+                                <p:column headerText="Código">#{tipoMembro.id}</p:column>
+                                <p:column headerText="Tipo de Membro">#{tipoMembro.descricao}</p:column>
+                                <p:column style="alignment-adjust: middle" headerText="Ativo/Inativo">
+                                    <p:selectBooleanButton value="#{tipoMembro.ativo}" onLabel="Ativo" offLabel="Inativo" disabled="true"/>
+                                </p:column>
+                                <p:column style="text-align: center">
+                                    <f:facet name="header">Data Inativo</f:facet>  
+                                    <h:outputText value="#{tipoMembro.dataInativo}">  
+                                        <f:convertDateTime pattern="dd/MM/yyyy" />  
+                                    </h:outputText>
+                                </p:column>
+
+                            </p:dataTable>
+                        </f:ajax>
+                    </p:tab>
+                    <p:tab title="#{tiposDatasBean.tituloAba}" rendered="#{tiposMembrosBean.modoInclusao || tiposMembrosBean.modoAlteracao}">
+                        <p:commandButton icon="ui-icon-confirm" value="Grava">
+                            <f:ajax
+                                event="click"
+                                render="formulario:tipos_membros"
+                                listener="#{tiposMembrosBean.gravar}"/>
+                        </p:commandButton>
+                        <p:commandButton icon="ui-icon-cancel" value="Cancela">
+                            <f:ajax 
+                                event="click" 
+                                render="formulario:tipos_membros"
+                                listener="#{tiposMembrosBean.cancelarInclusao}"/>
+                        </p:commandButton>
+                        <p:separator/>
+                        <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
+                            <h:outputLabel value="Descrição" for="campo-descricao"/>
+                            <h:inputText id="campo-descricao" value="#{tiposMembrosBean.novo.descricao}"/>
+                            <h:outputText value="Ativo/Inativo " />
+                            <p:selectBooleanButton value="#{tiposMembrosBean.novo.ativo}" onLabel="Ativo" offLabel="Inativo" style="width:auto"/>
+                        </h:panelGrid>
+                    </p:tab>
+                </p:tabView>
+            </f:ajax>
+        </h:form>
+    </ui:define>
+</ui:composition>

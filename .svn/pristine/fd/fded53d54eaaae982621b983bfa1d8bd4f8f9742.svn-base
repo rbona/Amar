@@ -1,0 +1,196 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package br.com.amar.controle.template;
+
+import br.com.amar.modelo.template.ModeloRepositorio;
+import java.io.Serializable;
+import java.lang.reflect.ParameterizedType;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.faces.bean.ManagedBean;
+import javax.faces.view.ViewScoped;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+import javax.persistence.EntityManager;
+import javax.servlet.http.HttpServletRequest;
+
+/**
+ * Modelo para as classes que apresentam dados em lista
+ *
+ * @author Rodrigo
+ * @param <tipo> Tipo da classe de persistencia
+ * @param <tipoRepositorio> Tipo da classe de repositório
+ */
+@ManagedBean
+@ViewScoped
+public abstract class GradesAcessoDadosCRUDBean<tipo, tipoRepositorio extends ModeloRepositorio<tipo>> implements Serializable {
+
+    public GradesAcessoDadosCRUDBean() {
+        String nomeRepositorio = ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[1].getTypeName();
+        try {
+            try {
+                repositorio = (tipoRepositorio) Class.forName(nomeRepositorio).newInstance();
+                repositorio.setGerenciador(this.getEntityManager());
+            } catch (InstantiationException ex) {
+                Logger.getLogger(GradesAcessoDadosCRUDBean.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IllegalAccessException ex) {
+                Logger.getLogger(GradesAcessoDadosCRUDBean.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(GradesAcessoDadosCRUDBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private tipoRepositorio repositorio;
+
+    /**
+     * Mantém o objeto que será incluído
+     */
+    private tipo novo;
+
+    /**
+     * Retorna o objeto que será incluído
+     *
+     * @return Objeto a ser incluído
+     */
+    public tipo getNovo() {
+        return this.novo;
+    }
+
+    /**
+     * Defini o objeto que será incluído
+     *
+     * @param novoObjeto Objeto a ser incluído
+     */
+    public void setNovo(tipo novoObjeto) {
+        this.novo = novoObjeto;
+    }
+
+    /**
+     * Indica se está em modo de inclusão de dados
+     */
+    private boolean modoInclusao = false;
+
+    /**
+     * Retornoa o modo de inclusão
+     *
+     * @return True indica que o modo de inclusão está ativo, false indica que
+     * está inativo
+     */
+    public boolean getModoInclusao() {
+        return this.modoInclusao;
+    }
+
+    /**
+     * Defini o modo de inclusão
+     *
+     * @param novoModo True para ativar o modo, false desativa o modo
+     */
+    public void setModoInclusao(boolean novoModo) {
+        boolean erro = true;
+        if (novoModo) {
+            try {
+                String nomeClasseCRUD = ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[0].getTypeName();
+                setNovo((tipo) Class.forName(nomeClasseCRUD).newInstance());
+                erro = false;
+            } catch (IllegalArgumentException ex) {
+                Logger.getLogger(GradesAcessoDadosCRUDBean.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (Exception ex) {
+                Logger.getLogger(GradesAcessoDadosCRUDBean.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            erro = false;
+            setNovo(null);
+        }
+
+        if (!erro) {
+            this.modoInclusao = novoModo;
+        }
+    }
+
+    /**
+     * Mantém os registros que foram selecionados
+     */
+    private List<tipo> selecionados;
+
+    /**
+     * Retorna a lista dos objetos selecionados
+     *
+     * @return
+     */
+    public List<tipo> getSelecionados() {
+        return selecionados;
+    }
+
+    /**
+     * Defini uma nova lista de objetos selecionados
+     *
+     * @param novasSelecoes
+     */
+    public void setSelecionados(List<tipo> novasSelecoes) {
+        this.selecionados = novasSelecoes;
+    }
+
+    /**
+     * Método que retorna todos os dados de uma entidade conforme tipo
+     *
+     * @return Lista dos dados conforme tipo
+     */
+    public List<tipo> getDados(){
+        repositorio.setGerenciador(this.getEntityManager());
+        return repositorio.buscaTodos();
+    }
+
+    /**
+     * Retorna o gerenciador de entidade
+     *
+     * @return Gerenciador de entidade
+     */
+    protected EntityManager getEntityManager() {
+        FacesContext fc = FacesContext.getCurrentInstance();
+        ExternalContext ec = fc.getExternalContext();
+        HttpServletRequest request = (HttpServletRequest) ec.getRequest();
+        EntityManager manager = (EntityManager) request.getAttribute("EntityManager");
+
+        return manager;
+    }
+
+    /**
+     * Executa processo para apagar as entidades selecionadas
+     */
+    public void apagaSelecionados() {
+        if (getSelecionados() != null && getSelecionados().size() > 0) {
+            getSelecionados().stream().forEach((entidadeAtual) -> {
+                getEntityManager().remove(entidadeAtual);
+            });
+            getSelecionados().clear();
+        }
+    }
+
+    /**
+     * Inicialisa o modo de inclusão
+     */
+    public void iniciarInclusao() {
+        setModoInclusao(true);
+    }
+
+    /**
+     * Executa processo de cancelamento da inclusão
+     */
+    public void cancelarInclusao() {
+        setModoInclusao(false);
+    }
+
+    /**
+     * Executa processo para gravar as alterações no banco de dados
+     */
+    public void gravar() {
+        repositorio.setGerenciador(this.getEntityManager());
+        repositorio.incluir(this.novo);
+        setModoInclusao(false);
+    }
+}

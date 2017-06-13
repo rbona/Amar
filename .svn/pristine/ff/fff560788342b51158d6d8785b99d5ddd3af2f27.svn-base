@@ -1,0 +1,45 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package br.com.amar.controle;
+
+import java.io.Serializable;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
+
+/**
+ *
+ * @author Rodrigo
+ */
+@ManagedBean
+@SessionScoped
+public class PrincipalBean implements Serializable {
+
+    /**
+     * Creates a new instance of PrincipalBean
+     */
+    public PrincipalBean() {
+    }
+
+    /**
+     * Retorna o caminho para chegar na listagem de tipos de datas
+     *
+     * @return Caminho para listagem de tipos de datas
+     */
+    public String chamaListaTiposDatas() {
+        return "/Cadastros/TiposDatas.xhtml";
+    }
+
+    /**
+     * Retorna o caminho para chamar o formulário de listagem de tipos de
+     * endereços
+     *
+     * @return Caminho para o formulário de listagem de tipos de endereços
+     */
+    public String chamaListaTiposEnderecos() {
+        return "/Cadastros/TiposEnderecos.xhtml";
+    }
+
+}

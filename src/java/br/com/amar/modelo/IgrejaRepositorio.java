@@ -1,0 +1,53 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package br.com.amar.modelo;
+
+import br.com.amar.modelo.template.ModeloRepositorio;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.Query;
+
+/**
+ *
+ * @author Rodrigo
+ */
+public class IgrejaRepositorio extends ModeloRepositorio<Igreja> {
+
+    @Override
+    public List<Igreja> buscaTodos() {
+        ArrayList<Igreja> lista = null;
+        if (this.getGerenciador() != null) {
+            Query consulta = this.getGerenciador().createQuery("select d from Igreja d");
+            lista = (ArrayList<Igreja>) consulta.getResultList();
+        }
+        return lista;
+    }
+
+    @Override
+    public Igreja buscarRegistro(Long[] chavePrimaria) {
+        Igreja registro = null;
+
+        if (chavePrimaria.length > 0) {
+            Query consulta = this.getGerenciador().createQuery("select d from Igreja d where d.id = " + chavePrimaria[0]);
+            List<Igreja> lista = (ArrayList<Igreja>) consulta.getResultList();
+            if (lista.size() > 0) {
+                registro = lista.get(0);
+            }
+        }
+
+        return registro;
+    }
+
+    public Igreja buscarRegistro(long chavePrimaria) {
+        Igreja registro = null;
+        Query consulta = this.getGerenciador().createQuery("select d from Igreja d where d.id = " + chavePrimaria);
+        List<Igreja> lista = (ArrayList<Igreja>) consulta.getResultList();
+        if (lista.size() > 0) {
+            registro = lista.get(0);
+        }
+        return registro;
+    }
+}

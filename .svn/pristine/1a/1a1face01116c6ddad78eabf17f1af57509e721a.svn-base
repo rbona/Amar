@@ -1,0 +1,66 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package br.com.amar.modelo;
+
+import br.com.amar.modelo.template.ModeloEntidade;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
+/**
+ * Mantém o tipo de endereço
+ *
+ * @author Rodrigo
+ */
+@Entity
+public class TipoEndereco extends ModeloEntidade{
+
+    /**
+     * Identificado do tipo de endereço
+     */
+    @Id
+    @GeneratedValue
+    private Long id;
+
+    /**
+     * Retorna o Id do tipo de endereço
+     *
+     * @return
+     */
+    public Long getId() {
+        return this.id;
+    }
+
+    /**
+     * Descrição do tipo de endereço
+     */
+    @Column(nullable = false,length = 100)     
+    private String descricao;
+
+    /**
+     * Retorna a descrição do tipo de endereço
+     *
+     * @return Descrição atual do tipo de endereço
+     */
+    public String getDescricao() {
+        return this.descricao;
+    }
+
+    /**
+     * Defini uma descrição para o tipo de endereço
+     *
+     * @param novaDescricao Nova descrição para o tipo de endereço
+     */
+    public void setDescricao(String novaDescricao) {
+        this.descricao = novaDescricao;
+    }
+
+    @Override
+    public Long[] getChavePrimaria() {
+        return new Long[]{this.id};
+    }
+}

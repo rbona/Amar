@@ -1,0 +1,91 @@
+<ui:composition template="/WEB-INF/Templates/TelaPrincipal.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets" 
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:define name="conteudo">
+        <h:form id="formulario">
+            <f:ajax>
+                <p:tabView id="tab_principal">
+                    <p:tab title="Manutenção de Unidades da Federação" rendered="#{unidadeFederacaoBean.modoListagem}" >
+                        <p:commandButton icon="ui-icon-plus" value="Inclui">
+                            <f:ajax
+                                event="click"
+                                execute="tab_principal"
+                                render="tab_principal"
+                                listener="#{unidadeFederacaoBean.iniciarInclusao}"/>
+                        </p:commandButton>
+                        <p:commandButton id="apaga_selecionado" icon="ui-icon-minus" value="Apaga">
+                            <f:ajax 
+                                event="click" 
+                                execute="lista_tab_principal" 
+                                render="lista_tab_principal"
+                                listener="#{unidadeFederacaoBean.apagaSelecionados}"/>
+                            <p:confirm header="Apagar" message="Confirmar apagar o registro ?" icon="ui-icon-alert"/>
+                        </p:commandButton>
+                        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                            <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                            <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                        </p:confirmDialog>
+                        <p:commandButton icon="ui-icon-edit" value="Editar">
+                            <f:ajax 
+                                event="click" 
+                                execute="tab_principal" 
+                                render="tab_principal"
+                                listener="#{unidadeFederacaoBean.alterarRegistro}"/>
+                        </p:commandButton>
+                        <p:separator/>
+                        <f:ajax>
+                            <p:dataTable
+                                id="lista_tab_principal"
+                                value="#{unidadeFederacaoBean.dados}"
+                                var="unidadeFederacao"
+                                selectionMode="multiple"
+                                rowKey="#{unidadeFederacao.id}"
+                                selection="#{unidadeFederacaoBean.selecionados}">
+
+                                <p:column headerText="Código">#{unidadeFederacao.id}</p:column>
+                                <p:column headerText="Unidade da Federação">#{unidadeFederacao.descricao}</p:column>
+                                <p:column style="text-align: center" headerText="Sigla">#{unidadeFederacao.sigla}</p:column>
+                                <p:column style="alignment-adjust: middle" headerText="Ativo/Inativo">
+                                    <p:selectBooleanButton value="#{unidadeFederacao.ativo}" onLabel="Ativo" offLabel="Inativo" disabled="true"/>
+                                </p:column>
+                                <p:column style="text-align: center">
+                                    <f:facet name="header">Data Inativo</f:facet>  
+                                    <h:outputText value="#{unidadeFederacao.dataInativo}">  
+                                        <f:convertDateTime pattern="dd/MM/yyyy" />  
+                                    </h:outputText>
+                                </p:column>
+
+                            </p:dataTable>
+                        </f:ajax>
+                    </p:tab>
+                    <p:tab title="#{unidadeFederacaoBean.tituloAba}" rendered="#{unidadeFederacaoBean.modoInclusao || unidadeFederacaoBean.modoAlteracao}">
+                        <p:commandButton icon="ui-icon-confirm" value="Grava">
+                            <f:ajax
+                                event="click"
+                                render="formulario:tab_principal"
+                                listener="#{unidadeFederacaoBean.gravar}"/>
+                        </p:commandButton>
+                        <p:commandButton icon="ui-icon-cancel" value="Cancela">
+                            <f:ajax 
+                                event="click" 
+                                render="formulario:tab_principal"
+                                listener="#{unidadeFederacaoBean.cancelarInclusao}"/>
+                        </p:commandButton>
+                        <p:separator/>
+                        <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
+                            <h:outputLabel value="Unidade da Federação" for="campo-descricao"/>
+                            <h:inputText id="campo-descricao" value="#{unidadeFederacaoBean.novo.descricao}"/>
+                            <h:outputLabel value="Sigla" for="campo-sigla"/>
+                            <h:inputText id="campo-sigla" value="#{unidadeFederacaoBean.novo.sigla}"/>
+                            <h:outputText value="Ativo/Inativo " />
+                            <p:selectBooleanButton value="#{unidadeFederacaoBean.novo.ativo}" onLabel="Ativo" offLabel="Inativo" style="width:auto"/>
+                        </h:panelGrid>
+                    </p:tab>
+                </p:tabView>
+            </f:ajax>
+        </h:form>
+    </ui:define>
+</ui:composition>

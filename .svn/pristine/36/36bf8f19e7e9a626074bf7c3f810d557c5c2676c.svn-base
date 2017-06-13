@@ -1,0 +1,28 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package br.com.amar.controle;
+
+import br.com.amar.controle.template.GradesAcessoDadosCRUDBean;
+import br.com.amar.modelo.TipoEndereco;
+import br.com.amar.modelo.TipoEnderecoRepositorio;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
+
+/**
+ *
+ * @author Rodrigo
+ */
+@ManagedBean
+@ViewScoped
+public class TiposEnderecosBean extends GradesAcessoDadosCRUDBean<TipoEndereco, TipoEnderecoRepositorio> {
+
+    /**
+     * Creates a new instance of TiposEnderecosBean
+     */
+    public TiposEnderecosBean() {
+    }
+    
+}

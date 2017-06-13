@@ -1,0 +1,900 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package br.com.amar.modelo;
+
+import br.com.amar.modelo.template.ModeloEntidade;
+import java.io.Serializable;
+import java.util.Date;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+/**
+ *
+ * @author Rodrigo
+ */
+@Entity
+public class Membro extends ModeloEntidade implements Serializable {
+
+    /**
+     *
+     */
+    public Membro() {
+        setNome("");
+        setNomeConjuge("");
+        setNomeMae("");
+        setNomePai("");
+        setAtivo();
+    }
+
+    // <editor-fold desc="Atributos">
+    /**
+     * Identificador do membro
+     */
+    @Id
+    @GeneratedValue
+    private Long id;
+
+    /**
+     * Nome do membro
+     */
+    @Column(nullable = false, length = 100)
+    private String nome;
+
+    /**
+     * Número do telefone
+     */
+    @Column(nullable = true, length = 25)
+    private String telefone;
+
+    /**
+     * Número do telefone celular
+     */
+    @Column(nullable = true, length = 25)
+    private String celular;
+
+    /**
+     * Nome do conjuge do membro
+     */
+    @Column(nullable = true, length = 100)
+    private String nomeConjuge;
+
+    /**
+     * Nome do pai
+     */
+    @Column(nullable = true, length = 100)
+    private String nomePai;
+
+    /**
+     * Nome da mãe
+     */
+    @Column(nullable = true, length = 100)
+    private String nomeMae;
+
+    /**
+     * Quando inativo preenche esse campo com a data
+     */
+    @Column(nullable = true)
+    @Temporal(TemporalType.DATE)
+    private Date dataInativo;
+
+    /**
+     * Campo que armazena a igreja do membro
+     */
+    @ManyToOne(fetch = FetchType.EAGER, targetEntity = Igreja.class)
+    @JoinColumn(name = "igrejaId", referencedColumnName = "id")
+    private Igreja igreja;
+
+    /**
+     * Estado Civil do membro
+     */
+    @ManyToOne(fetch = FetchType.EAGER, targetEntity = EstadoCivil.class)
+    @JoinColumn(name = "estadoCivilId", referencedColumnName = "id")
+    private EstadoCivil estadoCivil;
+
+    /**
+     * Tipo de admissão
+     */
+    @ManyToOne(fetch = FetchType.EAGER, targetEntity = TipoAdmissao.class)
+    @JoinColumn(name = "tipoAdmissaoId", referencedColumnName = "id")
+    private TipoAdmissao tipoAdmissao;
+
+    /**
+     * Tipo do membro
+     */
+    @ManyToOne(fetch = FetchType.EAGER, targetEntity = TipoMembro.class)
+    @JoinColumn(name = "tipoMembroId", referencedColumnName = "id")
+    private TipoMembro tipoMembro;
+    
+    /**
+     * Naturalidade
+     */
+    @ManyToOne(fetch = FetchType.EAGER, targetEntity = Naturalidade.class)
+    @JoinColumn(name = "naturalidadeId", referencedColumnName = "id")
+    private Naturalidade naturalidade;
+
+    /**
+     * 1ª Função
+     */
+    @ManyToOne(fetch = FetchType.EAGER, targetEntity = Funcao.class)
+    @JoinColumn(name = "funcao1Id", referencedColumnName = "id")
+    private Funcao funcao1;
+
+    /**
+     * 2ª Função
+     */
+    @ManyToOne(fetch = FetchType.EAGER, targetEntity = Funcao.class)
+    @JoinColumn(name = "funcao2Id", referencedColumnName = "id")
+    private Funcao funcao2;
+
+    /**
+     * 1ª Seção
+     */
+    @ManyToOne(fetch = FetchType.EAGER, targetEntity = Secao.class)
+    @JoinColumn(name = "secao1Id", referencedColumnName = "id")
+    private Secao secao1;
+
+    /**
+     * 2ª Seção
+     */
+    @ManyToOne(fetch = FetchType.EAGER, targetEntity = Secao.class)
+    @JoinColumn(name = "secao2Id", referencedColumnName = "id")
+    private Secao secao2;
+
+    /**
+     * Logradouro e número
+     */
+    @Column(nullable = true, length = 250)
+    private String endereco;
+
+    /**
+     * Nome do bairro referente endereço
+     */
+    @Column(nullable = true, length = 100)
+    private String bairro;
+
+    /**
+     * Complemento do endereço
+     */
+    @Column(nullable = true, length = 250)
+    private String complemento;
+
+    /**
+     * Nome da cidade referente endereço
+     */
+    @Column(nullable = true, length = 100)
+    private String cidade;
+
+    /**
+     * CEP do endereço
+     */
+    @Column(nullable = true, length = 15)
+    private String cep;
+
+    /**
+     * Pais relacionado ao endereço
+     */
+    @ManyToOne(fetch = FetchType.EAGER, targetEntity = Pais.class)
+    @JoinColumn(name = "paisId", referencedColumnName = "id")
+    private Pais pais;
+
+    /**
+     * Estado relacionado ao endereço
+     */
+    @ManyToOne(fetch = FetchType.EAGER, targetEntity = UF.class)
+    @JoinColumn(name = "ufId", referencedColumnName = "id")
+    private UF uf;
+
+    /**
+     * Estado relacionado a naturalidade
+     */
+    @ManyToOne(fetch = FetchType.EAGER, targetEntity = UF.class)
+    @JoinColumn(name = "ufNaturalidadeId", referencedColumnName = "id")
+    private UF ufNaturalidade;
+
+    /**
+     * Nacionalidade
+     */
+    @ManyToOne(fetch = FetchType.EAGER, targetEntity = Nacionalidade.class)
+    @JoinColumn(name = "nacionalidadeId", referencedColumnName = "id")
+    private Nacionalidade nacionalidade;
+
+    /**
+     * Sexo
+     */
+    @ManyToOne(fetch = FetchType.EAGER, targetEntity = Sexo.class)
+    @JoinColumn(name = "sexoId", referencedColumnName = "id")
+    private Sexo sexo;
+
+    /**
+     * Data da consagração
+     */
+    @Column(nullable = true)
+    @Temporal(TemporalType.DATE)
+    private Date dataConsagracao;
+
+    /**
+     * Ministério
+     */
+    @ManyToOne(fetch = FetchType.EAGER, targetEntity = Ministerio.class)
+    @JoinColumn(name = "ministerioId", referencedColumnName = "id")
+    private Ministerio ministerio;
+
+    /**
+     * Local
+     */
+    @Column(nullable = true, length = 100)
+    private String localMinisterio;
+
+    /**
+     * Empresa
+     */
+    @Column(nullable = true, length = 100)
+    private String empresa;
+
+    /**
+     * Telefone Empresa
+     */
+    @Column(nullable = true, length = 25)
+    private String telefoneEmpresa;
+
+    /**
+     * Fax Empresa
+     */
+    @Column(nullable = true, length = 25)
+    private String faxEmpresa;
+
+    /**
+     * Logradouro e número da empresa
+     */
+    @Column(nullable = true, length = 250)
+    private String enderecoEmpresa;
+
+    /**
+     * Nome do bairro referente endereço da empresa
+     */
+    @Column(nullable = true, length = 100)
+    private String bairroEmpresa;
+
+    /**
+     * Nome da cidade referente endereço empresa
+     */
+    @Column(nullable = true, length = 100)
+    private String cidadeEmpresa;
+
+    /**
+     * Estado relacionado ao endereço empresa
+     */
+    @ManyToOne(fetch = FetchType.EAGER, targetEntity = UF.class)
+    @JoinColumn(name = "ufEmpresaId", referencedColumnName = "id")
+    private UF ufEnderecoEmpresa;
+
+    /**
+     * Função empresa
+     */
+    @ManyToOne(fetch = FetchType.EAGER, targetEntity = Funcao.class)
+    @JoinColumn(name = "funcaoEmpresaId", referencedColumnName = "id")
+    private Funcao funcaoEmpresa;
+
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Gets and Sets">
+    /**
+     * Retorna o identificador do membro
+     *
+     * @return Número que identifica o membro
+     */
+    public Long getId() {
+        return id;
+    }
+
+    /**
+     * Retorna o nome atual do membro
+     *
+     * @return Nome atual do membro
+     */
+    public String getNome() {
+        return this.nome;
+    }
+
+    /**
+     * Defini um novo nome para o membro
+     *
+     * @param novoNome Novo nome para o membro
+     */
+    public void setNome(String novoNome) {
+        this.nome = novoNome;
+    }
+
+    /**
+     * Retorna o nome atual do conjuge do membro
+     *
+     * @return Nome atual do conjuge do membro
+     */
+    public String getNomeConjuge() {
+        return this.nomeConjuge;
+    }
+
+    /**
+     * Defini um novo nome para o conjuge
+     *
+     * @param novoNomeConjuge Novo nome para o conjuge
+     */
+    public void setNomeConjuge(String novoNomeConjuge) {
+        this.nomeConjuge = novoNomeConjuge;
+    }
+
+    /**
+     * Retorna o nome do pai
+     *
+     * @return Nome do pai
+     */
+    public String getNomePai() {
+        return this.nomePai;
+    }
+
+    /**
+     * Defini um novo nome para o pai
+     *
+     * @param novoNomePai Novo nome para o pai
+     */
+    public void setNomePai(String novoNomePai) {
+        this.nome = novoNomePai;
+    }
+
+    /**
+     * Retorna o nome da mãe
+     *
+     * @return Nome da mãe
+     */
+    public String getNomeMae() {
+        return this.nomeMae;
+    }
+
+    /**
+     * Defini um novo nome para a mãe
+     *
+     * @param novoNomeMae Novo nome para a mãe
+     */
+    public void setNomeMae(String novoNomeMae) {
+        this.nomeMae = novoNomeMae;
+    }
+
+    /**
+     * Retorna a igreja relacionada ao membro
+     *
+     * @return Igreja relacionada
+     */
+    public Igreja getIgreja() {
+        return this.igreja;
+    }
+
+    /**
+     * Defini uma igreja ao membro
+     *
+     * @param igrejaRelacionar Igreja a ser definida
+     */
+    public void setIgreja(Igreja igrejaRelacionar) {
+        this.igreja = igrejaRelacionar;
+    }
+    
+    /**
+     * Retorna a naturalidade relacionada ao membro
+     * @return Naturlaidade relacionada
+     */
+    public Naturalidade getNaturalidade(){
+        return this.naturalidade;
+    }
+    
+    /**
+     * Defini uma naturalidade ao membro
+     * @param naturalidadeRelacionar Naturalidade a ser definida
+     */
+    public void setNaturalidade(Naturalidade naturalidadeRelacionar){
+        this.naturalidade = naturalidadeRelacionar;
+    }
+
+    /**
+     *
+     * @return
+     */
+    @Override
+    public Long[] getChavePrimaria() {
+        return new Long[]{getId()};
+    }
+
+    /**
+     * Retorna o número de telefone
+     *
+     * @return Númerol de telefone
+     */
+    public String getTelefone() {
+        return telefone;
+    }
+
+    /**
+     * Defini um numero de telefone
+     *
+     * @param novoTelefone Novo número de telefone
+     */
+    public void setTelefone(String novoTelefone) {
+        this.telefone = novoTelefone;
+    }
+
+    /**
+     * Retorna o número de telefone celular
+     *
+     * @return Número de telefone celular
+     */
+    public String getCelular() {
+        return celular;
+    }
+
+    /**
+     * Defini um novo número de celular
+     *
+     * @param novoCelular Novo número de celular
+     */
+    public void setCelular(String novoCelular) {
+        this.celular = novoCelular;
+    }
+
+    /**
+     * Retorna o estado civil
+     *
+     * @return Estado civil
+     */
+    public EstadoCivil getEstadoCivil() {
+        return estadoCivil;
+    }
+
+    /**
+     * Defini um novo estado civil
+     *
+     * @param novoEstadoCivil Novo estado civil
+     */
+    public void setEstadoCivil(EstadoCivil novoEstadoCivil) {
+        this.estadoCivil = novoEstadoCivil;
+    }
+
+    /**
+     * Retorna o tipo de adminissão
+     *
+     * @return Tipo de adminissão
+     */
+    public TipoAdmissao getTipoAdmissao() {
+        return tipoAdmissao;
+    }
+
+    /**
+     * Defini um novo tipo de adminissão
+     *
+     * @param novoTipoAdmissao Novo tipo de adminissão
+     */
+    public void setTipoAdmissao(TipoAdmissao novoTipoAdmissao) {
+        this.tipoAdmissao = novoTipoAdmissao;
+    }
+
+    /**
+     * Retorna o tipo de membro
+     *
+     * @return Tipo de membro
+     */
+    public TipoMembro getTipoMembro() {
+        return tipoMembro;
+    }
+
+    /**
+     * Defini o tipo de membro
+     *
+     * @param novoTipoMembro Novo tipo de membro
+     */
+    public void setTipoMembro(TipoMembro novoTipoMembro) {
+        this.tipoMembro = novoTipoMembro;
+    }
+
+    /**
+     * Retorna a 1ª função
+     *
+     * @return Função
+     */
+    public Funcao getFuncao1() {
+        return funcao1;
+    }
+
+    /**
+     * Defini uma nova 1ª função
+     *
+     * @param novaFuncao Nova função
+     */
+    public void setFuncao1(Funcao novaFuncao) {
+        this.funcao1 = novaFuncao;
+    }
+
+    /**
+     * Retorna a 2ª função
+     *
+     * @return Função
+     */
+    public Funcao getFuncao2() {
+        return funcao2;
+    }
+
+    /**
+     * Defini uma nova 2ª função
+     *
+     * @param novaFuncao Nova função
+     */
+    public void setFuncao2(Funcao novaFuncao) {
+        this.funcao2 = novaFuncao;
+    }
+
+    /**
+     * Retorna a 1ª seção
+     *
+     * @return Seção
+     */
+    public Secao getSecao1() {
+        return secao1;
+    }
+
+    /**
+     * Defini uma nova 1ª seção
+     *
+     * @param novaSecao Nova Seção
+     */
+    public void setSecao1(Secao novaSecao) {
+        this.secao1 = novaSecao;
+    }
+
+    /**
+     * Retorna a 2ª seção
+     *
+     * @return Seção
+     */
+    public Secao getSecao2() {
+        return secao2;
+    }
+
+    /**
+     * Defini uma nova 2ª seção
+     *
+     * @param novaSecao Nova Seção
+     */
+    public void setSecao2(Secao novaSecao) {
+        this.secao2 = novaSecao;
+    }
+
+    /**
+     * Retorna o endereço
+     *
+     * @return Endereço
+     */
+    public String getEndereco() {
+        return endereco;
+    }
+
+    /**
+     * Defini um novo endereço
+     *
+     * @param novoEndereco Novo endereço
+     */
+    public void setEndereco(String novoEndereco) {
+        this.endereco = novoEndereco;
+    }
+
+    /**
+     * Retorna o bairro
+     *
+     * @return Bairro
+     */
+    public String getBairro() {
+        return bairro;
+    }
+
+    /**
+     * Defini um novo bairro
+     *
+     * @param novoBairro Novo bairro
+     */
+    public void setBairro(String novoBairro) {
+        this.bairro = novoBairro;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getComplemento() {
+        return complemento;
+    }
+
+    /**
+     *
+     * @param complemento
+     */
+    public void setComplemento(String complemento) {
+        this.complemento = complemento;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getCidade() {
+        return cidade;
+    }
+
+    /**
+     *
+     * @param cidade
+     */
+    public void setCidade(String cidade) {
+        this.cidade = cidade;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getCep() {
+        return cep;
+    }
+
+    /**
+     *
+     * @param cep
+     */
+    public void setCep(String cep) {
+        this.cep = cep;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public UF getUf() {
+        return uf;
+    }
+
+    /**
+     *
+     * @param uf
+     */
+    public void setUf(UF uf) {
+        this.uf = uf;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public UF getUfNaturalidade() {
+        return ufNaturalidade;
+    }
+
+    /**
+     *
+     * @param ufNaturalidade
+     */
+    public void setUfNaturalidade(UF ufNaturalidade) {
+        this.ufNaturalidade = ufNaturalidade;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public Nacionalidade getNacionalidade() {
+        return nacionalidade;
+    }
+
+    /**
+     *
+     * @param nacionalidade
+     */
+    public void setNacionalidade(Nacionalidade nacionalidade) {
+        this.nacionalidade = nacionalidade;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public Sexo getSexo() {
+        return sexo;
+    }
+
+    /**
+     *
+     * @param sexo
+     */
+    public void setSexo(Sexo sexo) {
+        this.sexo = sexo;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public Date getDataConsagracao() {
+        return dataConsagracao;
+    }
+
+    /**
+     *
+     * @param dataConsagracao
+     */
+    public void setDataConsagracao(Date dataConsagracao) {
+        this.dataConsagracao = dataConsagracao;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public Ministerio getMinisterio() {
+        return ministerio;
+    }
+
+    /**
+     *
+     * @param ministerio
+     */
+    public void setMinisterio(Ministerio ministerio) {
+        this.ministerio = ministerio;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getLocalMinisterio() {
+        return localMinisterio;
+    }
+
+    /**
+     *
+     * @param local
+     */
+    public void setLocalMinisterio(String local) {
+        this.localMinisterio = local;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getEmpresa() {
+        return empresa;
+    }
+
+    /**
+     *
+     * @param empresa
+     */
+    public void setEmpresa(String empresa) {
+        this.empresa = empresa;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getTelefoneEmpresa() {
+        return telefoneEmpresa;
+    }
+
+    /**
+     *
+     * @param telefoneEmpresa
+     */
+    public void setTelefoneEmpresa(String telefoneEmpresa) {
+        this.telefoneEmpresa = telefoneEmpresa;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getFaxEmpresa() {
+        return faxEmpresa;
+    }
+
+    /**
+     *
+     * @param faxEmpresa
+     */
+    public void setFaxEmpresa(String faxEmpresa) {
+        this.faxEmpresa = faxEmpresa;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getEnderecoEmpresa() {
+        return enderecoEmpresa;
+    }
+
+    /**
+     *
+     * @param enderecoEmpresa
+     */
+    public void setEnderecoEmpresa(String enderecoEmpresa) {
+        this.enderecoEmpresa = enderecoEmpresa;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getBairroEmpresa() {
+        return bairroEmpresa;
+    }
+
+    /**
+     *
+     * @param bairroEmpresa
+     */
+    public void setBairroEmpresa(String bairroEmpresa) {
+        this.bairroEmpresa = bairroEmpresa;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getCidadeEmpresa() {
+        return cidadeEmpresa;
+    }
+
+    /**
+     *
+     * @param cidadeEmpresa
+     */
+    public void setCidadeEmpresa(String cidadeEmpresa) {
+        this.cidadeEmpresa = cidadeEmpresa;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public UF getUfEnderecoEmpresa() {
+        return ufEnderecoEmpresa;
+    }
+
+    /**
+     *
+     * @param ufEnderecoEmpresa
+     */
+    public void setUfEnderecoEmpresa(UF ufEnderecoEmpresa) {
+        this.ufEnderecoEmpresa = ufEnderecoEmpresa;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public Funcao getFuncaoEmpresa() {
+        return funcaoEmpresa;
+    }
+
+    /**
+     *
+     * @param funcaoEmpresa
+     */
+    public void setFuncaoEmpresa(Funcao funcaoEmpresa) {
+        this.funcaoEmpresa = funcaoEmpresa;
+    }
+// </editor-fold>
+}

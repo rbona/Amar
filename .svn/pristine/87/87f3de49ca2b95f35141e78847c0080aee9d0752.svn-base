@@ -1,0 +1,83 @@
+<ui:composition template="/WEB-INF/Templates/TelaPrincipal.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets" 
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:define name="conteudo">
+        <h:form id="formulario">
+            <f:ajax>
+                <p:tabView id="tipos_enderecos">
+                    <p:tab title="Manutenção de Tipos de Endereços" rendered="#{tiposEnderecosBean.modoListagem}" >
+                        <p:commandButton icon="ui-icon-plus" value="Inclui">
+                            <f:ajax
+                                event="click"
+                                execute="tipos_enderecos"
+                                render="tipos_enderecos"
+                                listener="#{tiposEnderecosBean.iniciarInclusao}"/>
+                        </p:commandButton>
+                        <p:commandButton id="apaga_selecionado" icon="ui-icon-minus" value="Apaga">
+                            <f:ajax 
+                                event="click" 
+                                execute="lista_tipos" 
+                                render="lista_tipos"
+                                listener="#{tiposEnderecosBean.apagaSelecionados}"/>
+                        </p:commandButton>
+                        <p:commandButton icon="ui-icon-edit" value="Editar">
+                            <f:ajax 
+                                event="click" 
+                                execute="tipos_enderecos" 
+                                render="tipos_enderecos"
+                                listener="#{tiposEnderecosBean.alterarRegistro}"/>
+                        </p:commandButton>
+                        <p:separator/>
+                        <f:ajax>
+                            <p:dataTable
+                                id="lista_tipos"
+                                value="#{tiposEnderecosBean.dados}"
+                                var="tipoEndereco"
+                                selectionMode="multiple"
+                                rowKey="#{tipoEndereco.id}"
+                                selection="#{tiposEnderecosBean.selecionados}">
+
+                                <p:column headerText="Código">#{tipoEndereco.id}</p:column>
+                                <p:column headerText="Tipo de Endereço">#{tipoEndereco.descricao}</p:column>
+                                <p:column style="alignment-adjust: middle" headerText="Ativo/Inativo">
+                                    <p:selectBooleanButton value="#{tipoEndereco.ativo}" onLabel="Ativo" offLabel="Inativo" disabled="true"/>
+                                </p:column>
+                                <p:column style="text-align: center">
+                                    <f:facet name="header">Data Inativo</f:facet>  
+                                    <h:outputText value="#{tipoEndereco.dataInativo}">  
+                                        <f:convertDateTime pattern="dd/MM/yyyy" />  
+                                    </h:outputText>
+                                </p:column>
+
+                            </p:dataTable>
+                        </f:ajax>
+                    </p:tab>
+                    <p:tab title="#{tiposDatasBean.tituloAba}" rendered="#{tiposEnderecosBean.modoInclusao || tiposEnderecosBean.modoAlteracao}">
+                        <p:commandButton icon="ui-icon-confirm" value="Grava">
+                            <f:ajax
+                                event="click"
+                                render="formulario:tipos_enderecos"
+                                listener="#{tiposEnderecosBean.gravar}"/>
+                        </p:commandButton>
+                        <p:commandButton icon="ui-icon-cancel" value="Cancela">
+                            <f:ajax 
+                                event="click" 
+                                render="formulario:tipos_enderecos"
+                                listener="#{tiposEnderecosBean.cancelarInclusao}"/>
+                        </p:commandButton>
+                        <p:separator/>
+                        <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
+                            <h:outputLabel value="Descrição" for="campo-descricao"/>
+                            <h:inputText id="campo-descricao" value="#{tiposEnderecosBean.novo.descricao}"/>
+                            <h:outputText value="Ativo/Inativo " />
+                            <p:selectBooleanButton value="#{tiposEnderecosBean.novo.ativo}" onLabel="Ativo" offLabel="Inativo" style="width:auto"/>
+                        </h:panelGrid>
+                    </p:tab>
+                </p:tabView>
+            </f:ajax>
+        </h:form>
+    </ui:define>
+</ui:composition>

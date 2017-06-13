@@ -1,0 +1,144 @@
+<ui:composition template="/WEB-INF/Templates/TelaPrincipal.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets" 
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:define name="conteudo">
+        <h:form id="formulario">
+            <f:ajax>
+                <p:tabView id="tab_principal">
+                    <p:tab title="Manutenção de Membros" rendered="#{membroBean.modoListagem}" >
+                        <p:commandButton icon="ui-icon-plus" value="Inclui">
+                            <f:ajax
+                                event="click"
+                                execute="tab_principal"
+                                render="tab_principal"
+                                listener="#{membroBean.iniciarInclusao}"/>
+                        </p:commandButton>
+                        <p:commandButton id="apaga_selecionado" icon="ui-icon-minus" value="Apaga">
+                            <f:ajax 
+                                event="click" 
+                                execute="lista_tab_principal" 
+                                render="lista_tab_principal"
+                                listener="#{membroBean.apagaSelecionados}"/>
+                            <p:confirm header="Apagar" message="Confirmar apagar o registro ?" icon="ui-icon-alert"/>
+                        </p:commandButton>
+                        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                            <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                            <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                        </p:confirmDialog>
+                        <p:commandButton icon="ui-icon-edit" value="Editar">
+                            <f:ajax 
+                                event="click" 
+                                execute="tab_principal" 
+                                render="tab_principal"
+                                listener="#{membroBean.alterarRegistro}"/>
+                        </p:commandButton>
+                        <p:separator/>
+                        <f:ajax>
+                            <p:dataTable
+                                id="lista_tab_principal"
+                                value="#{membroBean.dados}"
+                                var="membro"
+                                selectionMode="multiple"
+                                rowKey="#{membro.id}"
+                                selection="#{membroBean.selecionados}">
+
+                                <p:column headerText="Código">#{membro.id}</p:column>
+                                <p:column headerText="Membro">#{membro.nome}</p:column>
+                                <p:column headerText="Igreja">#{membro.igreja.descricao}</p:column>
+                                <p:column style="alignment-adjust: middle" headerText="Ativo/Inativo">
+                                    <p:selectBooleanButton value="#{membro.ativo}" onLabel="Ativo" offLabel="Inativo" disabled="true"/>
+                                </p:column>
+                                <p:column style="text-align: center">
+                                    <f:facet name="header">Data Inativo</f:facet>  
+                                    <h:outputText value="#{membro.dataInativo}">  
+                                        <f:convertDateTime pattern="dd/MM/yyyy" />  
+                                    </h:outputText>
+                                </p:column>
+
+                            </p:dataTable>
+                        </f:ajax>
+                    </p:tab>
+                    <p:tab title="#{membroBean.tituloAba}" rendered="#{membroBean.modoInclusao || membroBean.modoAlteracao}">
+                        <p:commandButton icon="ui-icon-confirm" value="Grava">
+                            <f:ajax
+                                event="click"
+                                render="formulario:tab_principal"
+                                listener="#{membroBean.gravar}"/>
+                        </p:commandButton>
+                        <p:commandButton icon="ui-icon-cancel" value="Cancela">
+                            <f:ajax 
+                                event="click" 
+                                render="formulario:tab_principal"
+                                listener="#{membroBean.cancelarInclusao}"/>
+                        </p:commandButton>
+                        <p:separator/>
+                        <h:panelGrid columns="4" style="margin-bottom:10px" cellpadding="5">
+
+                            <h:outputLabel value="Membro" for="campo-descricao"/>
+                            <h:inputText id="campo-descricao" value="#{membroBean.novo.nome}"/>
+
+                            <h:outputLabel value="Nome Cônjuge" for="campo-conjuge"/>
+                            <h:inputText id="campo-conjuge" value="#{membroBean.novo.nomeConjuge}"/>
+
+                            <h:outputLabel value="Nome Pai" for="campo-pai"/>
+                            <h:inputText id="campo-pai" value="#{membroBean.novo.nomePai}"/>
+
+                            <h:outputLabel value="Nome Mãe" for="campo-mae"/>
+                            <h:inputText id="campo-mae" value="#{membroBean.novo.nomeMae}"/>
+
+                            <h:outputLabel value="Igreja" for="campo-igreja"/>
+                            <p:selectOneMenu 
+                                id="campo-igreja"
+                                value="#{membroBean.novo.igreja}">
+
+                                <f:selectItems 
+                                    value="#{igrejaBean.dados}" 
+                                    var="igrejaConsulta" 
+                                    itemLabel="#{igrejaConsulta.descricao}" 
+                                    itemValue="#{igrejaConsulta}">
+                                </f:selectItems>
+                            </p:selectOneMenu>
+
+                            <h:outputLabel value="Endereço" for="campo-endereco"/>
+                            <h:inputText id="campo-endereco" value="#{membroBean.novo.endereco}"/>
+
+                            <h:outputLabel value="Bairro" for="campo-bairro"/>
+                            <h:inputText id="campo-bairro" value="#{membroBean.novo.bairro}"/>
+
+                            <h:outputLabel value="Complemento" for="campo-complemento"/>
+                            <h:inputText id="campo-complemento" value="#{membroBean.novo.complemento}"/>
+
+                            <h:outputLabel value="Cidade" for="campo-cidade"/>
+                            <h:inputText id="campo-cidade" value="#{membroBean.novo.cidade}"/>
+
+                            <h:outputLabel value="CEP" for="campo-cep"/>
+                            <h:inputText id="campo-cep" value="#{membroBean.novo.cep}"/>
+                            
+                            <h:outputLabel value="Naturalidade" for="campo-naturalidade"/>
+                            <p:selectOneMenu 
+                                id="campo-naturalidade"
+                                value="#{membroBean.novo.naturalidade}">
+
+                                <f:selectItems 
+                                    value="#{naturalidadeBean.dados}" 
+                                    var="naturalidadeConsulta" 
+                                    itemLabel="#{naturalidadeConsulta.descricao}" 
+                                    itemValue="#{naturalidadeConsulta}">
+                                </f:selectItems>
+                            </p:selectOneMenu>
+                            
+                            <h:outputLabel value="UF Natural" for="campo-ufnatural"/>
+                            <!--<h:inputText id="campo-ufnatural" readonly="true" value="#{membroBean.novo.naturalidade.uf.sigla}"-->
+
+                            <h:outputText value="Ativo/Inativo " />
+                            <p:selectBooleanButton value="#{membroBean.novo.ativo}" onLabel="Ativo" offLabel="Inativo" style="width:auto"/>
+                        </h:panelGrid>
+                    </p:tab>
+                </p:tabView>
+            </f:ajax>
+        </h:form>
+    </ui:define>
+</ui:composition>

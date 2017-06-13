@@ -1,0 +1,175 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package br.com.amar.modelo;
+
+import br.com.amar.modelo.template.ModeloEntidade;
+import java.util.Date;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+/**
+ *
+ * @author Rodrigo
+ */
+@Entity
+public class Membro extends ModeloEntidade {
+
+    /**
+     * Identificador do membro
+     */
+    @Id
+    @GeneratedValue
+    private Long id;
+
+    /**
+     * Retorna o identificador do membro
+     *
+     * @return Número que identifica o membro
+     */
+    public Long getId() {
+        return id;
+    }
+
+    /**
+     * Nome do membro
+     */
+    @Column(nullable = false, length = 100)
+    private String nome;
+
+    /**
+     * Retorna o nome atual do membro
+     *
+     * @return Nome atual do membro
+     */
+    public String getNome() {
+        return this.nome;
+    }
+
+    /**
+     * Defini um novo nome para o membro
+     *
+     * @param novoNome Novo nome para o membro
+     */
+    public void setNome(String novoNome) {
+        this.nome = novoNome;
+    }
+
+    /**
+     * Nome do conjuge do membro
+     */
+    @Column(nullable = true, length = 100)
+    private String nomeConjuge;
+
+    /**
+     * Retorna o nome atual do conjuge do membro
+     *
+     * @return Nome atual do conjuge do membro
+     */
+    public String getNomeConjuge() {
+        return this.nomeConjuge;
+    }
+
+    /**
+     * Defini um novo nome para o conjuge
+     *
+     * @param novoNomeConjuge Novo nome para o conjuge
+     */
+    public void setNomeConjuge(String novoNomeConjuge) {
+        this.nomeConjuge = novoNomeConjuge;
+    }
+
+    /**
+     * Nome do pai
+     */
+    @Column(nullable = true, length = 100)
+    private String nomePai;
+
+    /**
+     * Retorna o nome do pai
+     *
+     * @return Nome do pai
+     */
+    public String getNomePai() {
+        return this.nomePai;
+    }
+
+    /**
+     * Defini um novo nome para o pai
+     *
+     * @param novoNomePai Novo nome para o pai
+     */
+    public void setNomePai(String novoNomePai) {
+        this.nome = novoNomePai;
+    }
+
+    /**
+     * Nome da mãe
+     */
+    @Column(nullable = true, length = 100)
+    private String nomeMae;
+
+    /**
+     * Retorna o nome da mãe
+     *
+     * @return Nome da mãe
+     */
+    public String getNomeMae() {
+        return this.nomeMae;
+    }
+
+    /**
+     * Defini um novo nome para a mãe
+     *
+     * @param novoNomeMae Novo nome para a mãe
+     */
+    public void setNomeMae(String novoNomeMae) {
+        this.nomeMae = novoNomeMae;
+    }
+
+    /**
+     * Campo que armazena a igreja do membro
+     */
+    @ManyToOne(fetch = FetchType.EAGER, targetEntity = Igreja.class)
+    @JoinColumn(name = "igrejaId")
+    private Igreja igreja;
+
+    /**
+     * Retorna a igreja relacionada ao membro
+     *
+     * @return Igreja relacionada
+     */
+    public Igreja getIgreja() {
+        return this.igreja;
+    }
+
+    /**
+     * Defini uma igreja ao membro
+     *
+     * @param igrejaRelacionar Igreja a ser definida
+     */
+    public void setIgreja(Igreja igrejaRelacionar) {
+        this.igreja = igrejaRelacionar;
+    }
+
+    /**
+     * Quando inativo preenche esse campo com a data
+     */
+    @Column(nullable = true)
+    @Temporal(TemporalType.DATE)
+    private Date dataInativo;
+
+    @Override
+    public Long[] getChavePrimaria() {
+        return new Long[]{getId()};
+    }
+}

@@ -1,0 +1,27 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package br.com.amar.controle.Conversores;
+
+import br.com.amar.controle.IgrejaBean;
+import br.com.amar.modelo.Igreja;
+import br.com.amar.modelo.template.ModeloEntidade;
+
+/**
+ *
+ * @author Rodrigo
+ */
+public class BuscaRegistro {
+
+    public static Object PorEntidade(ModeloEntidade entidade, Long Id) {
+        Object retorno = null;
+        if (entidade instanceof Igreja) {
+            IgrejaBean bean = new IgrejaBean();
+            retorno = bean.getDado(new Long[]{Id});
+        }
+
+        return retorno;
+    }
+}

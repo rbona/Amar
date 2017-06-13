@@ -1,0 +1,87 @@
+<ui:composition template="/WEB-INF/Templates/TelaPrincipal.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets" 
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:define name="conteudo">
+        <h:form id="formulario">
+            <f:ajax>
+                <p:tabView id="tipos_datas">
+                    <p:tab title="Manutenção de Tipos de Datas" rendered="#{tiposDatasBean.modoListagem}" >
+                        <p:commandButton icon="ui-icon-plus" value="Inclui">
+                            <f:ajax
+                                event="click"
+                                execute="tipos_datas"
+                                render="tipos_datas"
+                                listener="#{tiposDatasBean.iniciarInclusao}"/>
+                        </p:commandButton>
+                        <p:commandButton id="apaga_selecionado" icon="ui-icon-minus" value="Apaga">
+                            <f:ajax 
+                                event="click" 
+                                execute="lista_tipos" 
+                                render="lista_tipos"
+                                listener="#{tiposDatasBean.apagaSelecionados}"/>
+                            <p:confirm header="Apagar" message="Confirmar apagar o registro ?" icon="ui-icon-alert"/>
+                        </p:commandButton>
+                        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                            <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                            <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                        </p:confirmDialog>
+                        <p:commandButton icon="ui-icon-edit" value="Editar">
+                            <f:ajax 
+                                event="click" 
+                                execute="tipos_datas" 
+                                render="tipos_datas"
+                                listener="#{tiposDatasBean.alterarRegistro}"/>
+                        </p:commandButton>
+                        <p:separator/>
+                        <f:ajax>
+                            <p:dataTable 
+                                id="lista_tipos"
+                                value="#{tiposDatasBean.dados}" 
+                                var="tipoData" 
+                                selectionMode="multiple" 
+                                rowKey="#{tipoData.id}"
+                                selection="#{tiposDatasBean.selecionados}">
+
+                                <p:column headerText="Código">#{tipoData.id}</p:column>
+                                <p:column headerText="Tipo de Data">#{tipoData.descricao}</p:column>
+                                <p:column style="alignment-adjust: middle" headerText="Ativo/Inativo">
+                                    <p:selectBooleanButton value="#{tipoData.ativo}" onLabel="Ativo" offLabel="Inativo" disabled="true"/>
+                                </p:column>
+                                <p:column style="text-align: center"> 
+                                    <f:facet name="header">Data Inativo</f:facet>  
+                                    <h:outputText value="#{tipoData.dataInativo}">  
+                                        <f:convertDateTime pattern="dd/MM/yyyy" />  
+                                    </h:outputText>
+                                </p:column>
+                            </p:dataTable>
+                        </f:ajax>
+                    </p:tab>
+                    <p:tab title="#{tiposDatasBean.tituloAba}" rendered="#{tiposDatasBean.modoInclusao || tiposDatasBean.modoAlteracao}">
+                        <p:commandButton icon="ui-icon-confirm" value="Grava">
+                            <f:ajax
+                                event="click"
+                                render="formulario:tipos_datas"
+                                listener="#{tiposDatasBean.gravar}"/>
+                        </p:commandButton>
+                        <p:commandButton icon="ui-icon-cancel" value="Cancela">
+                            <f:ajax 
+                                event="click" 
+                                render="formulario:tipos_datas"
+                                listener="#{tiposDatasBean.cancelarInclusao}"/>
+                        </p:commandButton>
+                        <p:separator/>
+                        <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
+                            <h:outputLabel value="Descrição " for="campo-descricao"/>
+                            <h:inputText id="campo-descricao" value="#{tiposDatasBean.novo.descricao}"/>
+                            <h:outputText value="Ativo/Inativo " />
+                            <p:selectBooleanButton value="#{tiposDatasBean.novo.ativo}" onLabel="Ativo" offLabel="Inativo" style="width:auto"/>
+                        </h:panelGrid>
+                    </p:tab>
+                </p:tabView>
+            </f:ajax>
+        </h:form>
+    </ui:define>
+</ui:composition>

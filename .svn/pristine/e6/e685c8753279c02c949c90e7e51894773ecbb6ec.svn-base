@@ -1,0 +1,57 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package br.com.amar.modelo.template;
+
+import java.util.List;
+import javax.persistence.EntityManager;
+
+/**
+ * Modelo a ser utilizado nas classes de repositório
+ *
+ * @author Rodrigo
+ * @param <tipo> Tipo de dado a ser tratado no repositório
+ */
+public abstract class ModeloRepositorio<tipo> {
+
+    /**
+     * Gerenciador de entidades
+     */
+    private EntityManager gerenciador;
+
+    /**
+     * Retorna o gerenciador de entidade do repositório
+     *
+     * @return Gerencioador de entidade
+     */
+    public EntityManager getGerenciador() {
+        return this.gerenciador;
+    }
+
+    /**
+     * Defini o gerenciador de entidade para o repositório
+     *
+     * @param novoGerenciador Gerenciador de entidade
+     */
+    public void setGerenciador(EntityManager novoGerenciador) {
+        this.gerenciador = novoGerenciador;
+    }
+
+    /**
+     * Retorna todos os dados conforme entidade informada
+     *
+     * @return Todos os dados da entidade
+     */
+    public abstract List<tipo> buscaTodos();
+    
+    /**
+     * Inclui um registro no banco de dados
+     * @param novoRegistro Registro a ser incluido
+     */
+    public void incluir(tipo novoRegistro) {
+        gerenciador.persist(novoRegistro);
+    }
+    
+}
